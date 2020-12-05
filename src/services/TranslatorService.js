@@ -1,5 +1,5 @@
-import { db } from "../firebase";
+import { db } from '../firebase'
 
 export const getTranslators = () => {
-  return db.collection("translators").get();
-};
+  return db.collection('translators').get()
+}
