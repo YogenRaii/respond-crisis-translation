@@ -1,5 +1,5 @@
 export default function formatDate(date) {
-    var d = new Date(date),
+    var d = new Date(date.seconds * 1000 + date.nanoseconds / 1000),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
