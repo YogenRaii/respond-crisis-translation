@@ -74,8 +74,8 @@ export default ({currentProgress, translationDone, languagesDone, onChange, adva
                             <label className="uk-form-label" >How did you hear about us?</label>
                             {
                                 Organizations.map((org, index) => (
-                                    <div className="uk-margin">
-                                        <label key={'org ' + index}><input className="uk-radio" type="radio" name="find_us" onChange={() => {
+                                    <div key={'org ' + index}className="uk-margin">
+                                        <label><input className="uk-radio" type="radio" name="find_us" onChange={() => {
                                             let editAnswer = answers
                                             editAnswer['find_us'] = org
                                             onChange({answers: editAnswer})
