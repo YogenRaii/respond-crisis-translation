@@ -1,0 +1,23 @@
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: gray;
+}
+
+.footer a {
+	color: inherit;
+	display: inline-block;
+}
+
+.footer ul{
+  list-style: none;
+  text-align: center;
+}
+
+.footer li{
+  display: inline;
+  margin: 20px;
+}
