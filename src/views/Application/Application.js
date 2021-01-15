@@ -62,16 +62,17 @@ export default class Application extends React.Component {
         support: values.answers.support
       };
 
-      newValues.languages = {};
+      newValues.languages = [];
+      const languageIndex = 0;
 
       for (const language in values.languages) {
         if (values.languages[language].checked) {
-          newValues.languages[language] = values.languages[language];
+          newValues.languages[languageIndex] = values.languages[language];
           delete values.languages[language].checked;
 
           const experiences = Object.keys(values.languages[language].experience);
           const temp = experiences.filter(a => values.languages[language].experience[a].checked);
-          newValues.languages[language].experience = temp;
+          newValues.languages[languageIndex].experience = temp;
         }
       }
 
