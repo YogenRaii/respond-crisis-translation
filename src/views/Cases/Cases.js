@@ -1,7 +1,6 @@
 import React from "react";
 import "./Cases.css";
 import formatDate from "../../assets/helpers/formatDate";
-
 import lang_short from "../../assets/lists/langShort";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import * as CaseService from "../../services/CaseService";
@@ -22,7 +21,7 @@ export default class Cases extends React.Component {
         const data = snapshot.docs.map((doc) => doc.data());
         this.setState({ cases: data });
       })
-      .catch(reason => this.state.errorCode = 'create-list-error');;
+      .catch(reason => this.state.errorCode = 'create-list-error');
   }
 
   render() {

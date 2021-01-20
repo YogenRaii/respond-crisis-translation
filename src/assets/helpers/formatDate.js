@@ -1,4 +1,5 @@
 export default function formatDate(date) {
+    if (!date) return '';
     var d = new Date(date.seconds * 1000 + date.nanoseconds / 1000),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
