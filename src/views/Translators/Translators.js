@@ -58,7 +58,7 @@ export default class Translators extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {translators.map((onboard, i) => (
+                {translators?.map((onboard, i) => (
                   <React.Fragment
                     key={onboard.first_name + onboard.last_name + " " + i}
                   >
@@ -79,7 +79,7 @@ export default class Translators extends React.Component {
                           });
                         }}
                       >
-                        {onboard.languages.map((language, y) => (
+                        {onboard.languages?.map((language, y) => (
                           <span
                             className="uk-label"
                             key={
@@ -132,7 +132,7 @@ export default class Translators extends React.Component {
                           });
                         }}
                       >
-                        {onboard.specialities.map((special, z) => (
+                        {onboard.specialities?.map((special, z) => (
                           <span
                             key={
                               onboard.first_name +
@@ -185,7 +185,7 @@ export default class Translators extends React.Component {
                             <p>
                               <b>Language Supports</b>
                             </p>
-                            {onboard.languages.map((language, b) => (
+                            {onboard.languages?.map((language, b) => (
                               <p
                                 key={
                                   onboard.first_name +
@@ -207,7 +207,7 @@ export default class Translators extends React.Component {
                             <p>
                               <b>Oral Translation</b>
                             </p>
-                            {onboard.languages.map((language, b) =>
+                            {onboard.languages?.map((language, b) =>
                               language.oral ? (
                                 <p
                                   key={
@@ -233,7 +233,7 @@ export default class Translators extends React.Component {
                             <p>
                               <b>Sources</b>
                             </p>
-                            {onboard.found_us.map((sources, p) => (
+                            {onboard.found_us?.map((sources, p) => (
                               <p
                                 key={
                                   onboard.first_name +
