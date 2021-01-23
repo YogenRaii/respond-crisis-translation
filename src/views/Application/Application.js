@@ -3,7 +3,6 @@ import './Application.css';
 import firebase from 'firebase/app';
 import AppQuestions from '../../assets/lists/Application';
 import ApplicationPage from '../../components/ApplicationPage/ApplicationPage';
-import Organizations from '../../assets/lists/knownOrganizations';
 import Languages from '../../assets/lists/supportLangauges';
 import Experience from '../../assets/lists/experienceLevel';
 import { db } from '../../firebase';
@@ -13,8 +12,6 @@ export default class Application extends React.Component {
     super(props);
     this.state = {
       currentProgress: 0,
-      translationDone: false,
-      languagesDone: false,
       answers: {
         first_name: '',
         last_name: '',
@@ -147,7 +144,7 @@ export default class Application extends React.Component {
 
     render() {
       const {
-        currentProgress, translationDone, languagesDone, answers, languages,
+        currentProgress, answers, languages,
       } = this.state;
       return (
         <div className="uk-margin-large-left">
@@ -172,14 +169,11 @@ export default class Application extends React.Component {
           <div className="uk-container">
             <ApplicationPage
               currentProgress={currentProgress}
-              translationDone={translationDone}
-              languagesDone={languagesDone}
               onChange={this.onChange}
               advance={this.advance}
               previous={this.previous}
               answers={answers}
-              Organizations={Organizations}
-              Languages={languages}
+              languages={languages}
             />
           </div>
           <svg xmlns="http://www.w3.org/2000/svg">
