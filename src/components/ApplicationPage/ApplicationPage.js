@@ -8,8 +8,6 @@ import Stage3 from "./Stage3";
 
 export default ({
   currentProgress,
-  translationDone,
-  languagesDone,
   onChange,
   advance,
   previous,
