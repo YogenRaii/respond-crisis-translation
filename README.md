@@ -4,6 +4,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### Deploy on local firebase
+
+```
+npm run-script build
+firebase emulators:start
+```
+
+It will deploy in 
+
+```
+http://localhost:5000
+```
+
 ### `yarn start`
 
 Runs the app in the development mode.<br />
