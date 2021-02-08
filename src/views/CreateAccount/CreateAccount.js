@@ -88,7 +88,7 @@ export default class CreateAccount extends React.Component {
                 console.log(userRecord);
                 // if admin, lands to cases
                 // if translator, lands to my cases
-                this.setState({ loggedInUser: userRecord });
+                this.setState({ loggedInUser: userRecord, errorMessage: ""});
               },
               (err) => {
                 console.log(err);
