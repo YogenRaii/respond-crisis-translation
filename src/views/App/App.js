@@ -19,7 +19,6 @@ const Onboarding = lazy(() => import('../Onboarding/Onboarding'));
 const Settings = lazy(() => import('../Settings/Settings'));
 const CreateAccount = lazy(() => import('../CreateAccount/CreateAccount'));
 const Login = lazy(() => import('../Login/Login'));
-const ForgotPassword = lazy(() => import('../ForgotPassword/ForgotPassword'));
 
 const history = createBrowserHistory();
 
