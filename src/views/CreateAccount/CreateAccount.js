@@ -57,18 +57,13 @@ export default class CreateAccount extends React.Component {
   }
 
   getErrorMessage() {
-    if (this.state.error !== "") {
-      return (
-        <div>
-          <p className="ErrorMessage"> {this.state.error} </p>
-        </div> 
-        )
-    } else {
-      return (
-        <div>
-        </div>
-        )
-    }
+    return this.state.error ? (
+      <div>
+        <p className="ErrorMessage"> {this.state.error} </p>
+      </div>
+    ) : (
+      <div></div>
+    );
   }
 
   handleSubmit(e) {
@@ -76,7 +71,7 @@ export default class CreateAccount extends React.Component {
     if (this.state.password !== this.state.confirmPassword) {
       this.setState({ error: "Passwords do not match. Please fix." });
     } else if (this.state.password === "") {
-      this.setState({error: "Password cannot be empty."});
+      this.setState({ error: "Password cannot be empty." });
     } else {
       auth
         .confirmPasswordReset(this.state.oobCode, this.state.password)
@@ -88,7 +83,7 @@ export default class CreateAccount extends React.Component {
                 console.log(userRecord);
                 // if admin, lands to cases
                 // if translator, lands to my cases
-                this.setState({ loggedInUser: userRecord, errorMessage: ""});
+                this.setState({ loggedInUser: userRecord, errorMessage: "" });
               },
               (err) => {
                 console.log(err);
@@ -97,7 +92,7 @@ export default class CreateAccount extends React.Component {
             );
         })
         .catch((err) => {
-          this.setState({error: err});
+          this.setState({ error: err });
           console.log(err);
         });
     }
@@ -129,46 +124,46 @@ export default class CreateAccount extends React.Component {
           <br />
 
           <h4>Create login information</h4>
-            <section>
-              <form onSubmit={this.handleSubmit}>
-                <label>
-                  Email (account name):
-                  <br />
-                  <input
-                    readOnly={true}
-                    type="email"
-                    value={this.state.email}
-                    name="email_account"
-                  />
-                </label>
+          <section>
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Email (account name):
                 <br />
-                <label>
-                  Create a password:
-                  <br />
-                  <input
-                    type="password"
-                    name="password"
-                    onChange={this.updatePassword}
-                    placeholder="enter password here"
-                  />
-                </label>
+                <input
+                  readOnly={true}
+                  type="email"
+                  value={this.state.email}
+                  name="email_account"
+                />
+              </label>
+              <br />
+              <label>
+                Create a password:
                 <br />
-                <label>
-                  Please re-enter your password:
-                  <br />
-                  <input
-                    type="password"
-                    name="confirm-password"
-                    onChange={this.updateConfirmPassword}
-                    placeholder="re-enter password here"
-                  />
-                </label>
+                <input
+                  type="password"
+                  name="password"
+                  onChange={this.updatePassword}
+                  placeholder="enter password here"
+                />
+              </label>
+              <br />
+              <label>
+                Please re-enter your password:
                 <br />
-                {errorMessage}
-                <br />
-                <input type="submit" value="Complete" />
-              </form>
-            </section>
+                <input
+                  type="password"
+                  name="confirm-password"
+                  onChange={this.updateConfirmPassword}
+                  placeholder="re-enter password here"
+                />
+              </label>
+              <br />
+              {errorMessage}
+              <br />
+              <input type="submit" value="Complete" />
+            </form>
+          </section>
         </div>
         <Footer />
       </div>
