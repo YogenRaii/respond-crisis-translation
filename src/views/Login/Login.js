@@ -1,119 +1,119 @@
-import React from "react";
+import React, { useState } from "react";
+
 import Logo from "../../assets/images/Respond_Logo_icon_fullcolor.png";
 import Footer from "../../components/Footer/Footer";
 import "./Login.css";
+import { useAuth } from "../../components/Auth/Auth.js";
+import { useHistory, useLocation } from "react-router-dom";
 
-export default class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    // The passwords here will be viewable by "Inspect element", but this is
-    // not a privacy concern as it will only be the user's own passwords.
-    this.state = {
-      email: "",
-      password: "",
-      rememberMe: false,
-      error: "",
-    };
+function LoginPage() {
+  const history = useHistory();
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: "/" } };
 
-    this.updateEmail = this.updateEmail.bind(this);
-    this.updatePassword = this.updatePassword.bind(this);
-    this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
-    this.getErrorMessage = this.getErrorMessage.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  const auth = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState("");
+  const [error, setError] = useState("");
 
-  componentDidMount() {
-    this.setState({ isChecked: false });
-  }
+  const updateEmail = (e) => {
+    if (error) {
+      setError("");
+    }
+    setEmail(e.target.value);
+  };
 
-  updateEmail(e) {
-    this.setState({ email: e.target.value });
-  }
+  const updatePassword = (e) => {
+    if (error) {
+      setError("");
+    }
+    setPassword(e.target.value);
+  };
 
-  updatePassword(e) {
-    this.setState({ password: e.target.value });
-  }
+  const onChangeCheckbox = (e) => {
+    setRememberMe(e.target.checked);
+  };
 
-  onChangeCheckbox(e) {
-    this.setState({ rememberMe: e.target.checked });
-  }
-
-  getErrorMessage() {
-    return this.state.error ? (
-      <div>
-        <p className="ErrorMessage"> {this.state.error} </p>
-      </div>
-    ) : (
-      <div></div>
-    );
-  }
-
-  handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Call API to log into account and redirect to online portal.
-    // Need the necessary return values from the API for if the account
-    // already exists, etc.
-    // Email and password are available through this.state.
-  }
+    auth.signin(email, password).then(
+      (user) => {
+        console.log(user);
+        if (user && user.uid) {
+          // redirect
+          history.replace(from);
+        } else {
+          setError("Invalid Credentials! Please try with valid ones!");
+        }
+      },
+      (err) => {
+        setError("Invalid Credentials! Please try with valid ones!");
+      }
+    );
+  };
 
-  render() {
-    let errorMessage = this.getErrorMessage();
+  return (
+    <div className="Login">
+      <div className="UserInformation">
+        <img
+          className="Logo"
+          src={Logo}
+          width={50}
+          height={50}
+          alt="Respond Crisis Translation Logo"
+        />
+        <br />
+        <br />
 
-    return (
-      <div className="Login">
-        <div className="UserInformation">
-          <img
-            className="Logo"
-            src={Logo}
-            width={50}
-            height={50}
-            alt="Respond Crisis Translation Logo"
-          />
-          <br />
-          <br />
-
-          <h4>Sign in</h4>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Email:
-              <br />
-              <input
-                type="email"
-                name="email_account"
-                onChange={this.updateEmail}
-                placeholder="your email address here"
-              />
-            </label>
-            <br />
-            <label>
-              Password:
-              <br />
-              <input
-                type="password"
-                name="password"
-                onChange={this.updatePassword}
-                placeholder="your password here"
-              />
-            </label>
-            <br />
-            <a href="/forgotpassword">forgot password?</a>
-            <br />
+        <h4>Sign in</h4>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Email:
             <br />
             <input
-              type="checkbox"
-              checked={this.state.isChecked}
-              name="rememberMe"
-              onChange={this.onChangeCheckbox}
+              type="email"
+              name="email_account"
+              onChange={updateEmail}
+              value={email}
+              placeholder="your email address here"
             />
-            <label>Remember me</label>
+          </label>
+          <br />
+          <label>
+            Password:
             <br />
-            {errorMessage}
-            <br />
-            <input type="submit" value="Login" />
-          </form>
-        </div>
-        <Footer />
+            <input
+              type="password"
+              name="password"
+              onChange={updatePassword}
+              value={password}
+              placeholder="your password here"
+            />
+          </label>
+          <br />
+          <a href="/forgotpassword">forgot password?</a>
+          <br />
+          <br />
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            name="rememberMe"
+            value={rememberMe}
+            onChange={onChangeCheckbox}
+          />
+          <label>Remember me</label>
+          <br />
+          <div>
+            <p className="ErrorMessage"> {error} </p>
+          </div>
+          <br />
+          <input type="submit" value="Login" />
+        </form>
       </div>
-    );
-  }
+      <Footer />
+    </div>
+  );
 }
+
+export default LoginPage;

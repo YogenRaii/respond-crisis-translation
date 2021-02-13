@@ -18,6 +18,7 @@ export default class Onboarding extends React.Component {
   }
 
   componentDidMount() {
+    console.log('onboarding');
     TranslatorService.getTranslators("PENDING").then((snapshot) => {
       const data = snapshot.docs.map((doc) => doc.data());
       this.setState({ translators: data });
@@ -30,9 +31,6 @@ export default class Onboarding extends React.Component {
       <>
         <Sidebar
           active="onboarding"
-          user_type={this.props.user_type ? "admin" : "all"}
-          first_name={this.props.first_name}
-          last_name={this.props.last_name}
         />
         <div className="tm-main uk-section uk-section-default">
           <div

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 import * as CaseService from "../../services/CaseService";
+import { Link } from "react-router-dom";
 
 export default class CasePage extends React.Component {
   constructor(props) {
@@ -19,11 +20,11 @@ export default class CasePage extends React.Component {
     const caseId = this.props.match.params.case_id;
     CaseService.getCase(caseId)
       .then((doc) => {
-          if (doc.exists) {
-            this.setState({ case: doc.data() });
-          } else {
-              console.log('Do document found with id ', caseId);
-          }
+        if (doc.exists) {
+          this.setState({ case: doc.data() });
+        } else {
+          console.log("No document found with id ", caseId);
+        }
       })
       .catch((reason) => (this.state.errorCode = "create-list-error"));
   }
@@ -31,21 +32,16 @@ export default class CasePage extends React.Component {
   render() {
     return this.state.case ? (
       <>
-        <Sidebar
-          active="mycases"
-          user_type={this.props.user_type ? "admin" : "all"}
-          first_name={this.props.first_name}
-          last_name={this.props.last_name}
-        />
+        <Sidebar active="mycases" />
         <div className="tm-main uk-section uk-section-default">
           <div className="uk-container uk-position-relative uk-margin-remove">
-            <a
-              href="/mycases"
+            <Link
+              to="/mycases"
               className="uk-button uk-button-default uk-margin-bottom"
               type="button"
             >
               <FontAwesomeIcon icon={faChevronLeft} />
-            </a>
+            </Link>
             <div className="uk-clearfix">
               <div className="uk-float-left">
                 <p className="uk-text-lead uk-text-bold uk-margin-remove">

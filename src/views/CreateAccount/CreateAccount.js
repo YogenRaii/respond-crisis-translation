@@ -19,6 +19,7 @@ export default class CreateAccount extends React.Component {
       confirmPassword: "",
       loggedInUser: null,
       error: "",
+      codeError: null,
     };
 
     this.updatePassword = this.updatePassword.bind(this);
@@ -35,7 +36,7 @@ export default class CreateAccount extends React.Component {
         this.setState({ email: email, oobCode: oobCode });
       })
       .catch((err) => {
-        this.setState({ error: err.message });
+        this.setState({ codeError: err.message });
       });
   }
 
@@ -100,6 +101,7 @@ export default class CreateAccount extends React.Component {
 
   render() {
     const { loggedInUser } = this.state;
+    const { codeError } = this.state;
     let errorMessage = this.getErrorMessage();
 
     if (loggedInUser) {
@@ -124,46 +126,55 @@ export default class CreateAccount extends React.Component {
           <br />
 
           <h4>Create login information</h4>
-          <section>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                Email (account name):
+          {codeError ? (
+            <section>
+              <div>
+                <p>{codeError}</p>
+                <p>Please try resetting password!</p>
+              </div>
+            </section>
+          ) : (
+            <section>
+              <form onSubmit={this.handleSubmit}>
+                <label>
+                  Email (account name):
+                  <br />
+                  <input
+                    readOnly={true}
+                    type="email"
+                    value={this.state.email}
+                    name="email_account"
+                  />
+                </label>
                 <br />
-                <input
-                  readOnly={true}
-                  type="email"
-                  value={this.state.email}
-                  name="email_account"
-                />
-              </label>
-              <br />
-              <label>
-                Create a password:
+                <label>
+                  Create a password:
+                  <br />
+                  <input
+                    type="password"
+                    name="password"
+                    onChange={this.updatePassword}
+                    placeholder="enter password here"
+                  />
+                </label>
                 <br />
-                <input
-                  type="password"
-                  name="password"
-                  onChange={this.updatePassword}
-                  placeholder="enter password here"
-                />
-              </label>
-              <br />
-              <label>
-                Please re-enter your password:
+                <label>
+                  Please re-enter your password:
+                  <br />
+                  <input
+                    type="password"
+                    name="confirm-password"
+                    onChange={this.updateConfirmPassword}
+                    placeholder="re-enter password here"
+                  />
+                </label>
                 <br />
-                <input
-                  type="password"
-                  name="confirm-password"
-                  onChange={this.updateConfirmPassword}
-                  placeholder="re-enter password here"
-                />
-              </label>
-              <br />
-              {errorMessage}
-              <br />
-              <input type="submit" value="Complete" />
-            </form>
-          </section>
+                {errorMessage}
+                <br />
+                <input type="submit" value="Complete" />
+              </form>
+            </section>
+          )}
         </div>
         <Footer />
       </div>
