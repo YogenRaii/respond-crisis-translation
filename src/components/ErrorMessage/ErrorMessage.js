@@ -33,6 +33,6 @@ function ErrorMessage(props) {
     }
 
     return errorCode ? <p className="error">{getErrorMessage()}</p> : null;
-};
+}
 
 export default ErrorMessage;

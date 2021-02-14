@@ -41,7 +41,7 @@ export default class CreateAccount extends React.Component {
   }
 
   getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, "\\$&");
+    name = name.replace(/[[]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
       results = regex.exec(url);
     if (!results) return null;
@@ -76,7 +76,7 @@ export default class CreateAccount extends React.Component {
     } else {
       auth
         .confirmPasswordReset(this.state.oobCode, this.state.password)
-        .then((resp) => {
+        .then(() => {
           auth
             .signInWithEmailAndPassword(this.state.email, this.state.password)
             .then(

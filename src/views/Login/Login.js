@@ -47,7 +47,7 @@ function LoginPage() {
           setError("Invalid Credentials! Please try with valid ones!");
         }
       },
-      (err) => {
+      () => {
         setError("Invalid Credentials! Please try with valid ones!");
       }
     );

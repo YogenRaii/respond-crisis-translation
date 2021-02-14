@@ -13,7 +13,7 @@ export default ({ active}) => {
   let user_type = "translator";
 
   auth.currentUser.getIdTokenResult().then((idTokenResult) => {
-    if (!!idTokenResult.claims.admin) {
+    if (idTokenResult.claims.admin) {
       user_type = "admin";
     }
   });
@@ -52,7 +52,7 @@ export default ({ active}) => {
           )
         )}
         <li>
-          <a onClick={() => signout().then((res) => history.push("/"))}>
+          <a onClick={() => signout().then(() => history.push("/"))}>
             Logout
           </a>
         </li>
