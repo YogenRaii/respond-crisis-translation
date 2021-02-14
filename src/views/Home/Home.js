@@ -36,12 +36,7 @@ export default class Home extends React.Component {
     const { cases } = this.state;
     return (
       <>
-        <Sidebar
-          active="mycases"
-          user_type={this.props.user_type ? "admin" : "all"}
-          first_name={this.props.first_name}
-          last_name={this.props.last_name}
-        />
+        <Sidebar active="mycases" />
         <div className="tm-main uk-section uk-section-default">
           <div
             className="uk-container uk-position-relative uk-margin-remove"
