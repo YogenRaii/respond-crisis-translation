@@ -52,7 +52,7 @@ export default ({ active}) => {
           )
         )}
         <li>
-          <a onClick={() => signout().then(() => history.push("/"))}>
+          <a href="/#" onClick={() => signout().then(() => history.push("/"))}>
             Logout
           </a>
         </li>
