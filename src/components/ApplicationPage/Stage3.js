@@ -31,7 +31,7 @@ export default ({ advance, languages }) => {
         </li>
       </ul>
       <ul className="uk-switcher uk-margin">
-        {Object.keys(languages).map((l, index) =>
+        {Object.keys(languages).map((l) =>
           languages[l]["checked"] &&
           languages[l]["toEnglish"] &&
           languages[l]["fromEnglish"] ? (

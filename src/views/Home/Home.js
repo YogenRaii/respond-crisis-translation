@@ -1,15 +1,11 @@
 import React from "react";
-import "./Home.css";
-
-import Sidebar from "../../components/Sidebar/Sidebar";
-import lang_short from "../../assets/lists/langShort";
-
-import formatDate from "../../assets/helpers/formatDate";
-import * as CaseService from "../../services/CaseService";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 import { Link } from "react-router-dom";
-
+import formatDate from "../../assets/helpers/formatDate";
+import lang_short from "../../assets/lists/langShort";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import { auth } from "../../firebase";
+import * as CaseService from "../../services/CaseService";
+import "./Home.css";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -27,7 +23,7 @@ export default class Home extends React.Component {
             const data = snapshot.docs.map((doc) => doc.data());
             this.setState({ cases: data });
           })
-          .catch((reason) => (this.state.errorCode = "create-list-error"));
+          .catch(() => this.setState({ errorCode: "create-list-error" }));
       }
     });
   }

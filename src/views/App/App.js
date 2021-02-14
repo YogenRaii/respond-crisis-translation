@@ -34,7 +34,7 @@ class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       user.getIdTokenResult().then((idTokenResult) => {
-        if (!!idTokenResult.claims.admin) {
+        if (idTokenResult.claims.admin) {
           this.setState({ admin: true });
         }
       });
