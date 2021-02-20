@@ -34,10 +34,8 @@ export default class Application extends React.Component {
     const { languages } = this.state;
     const expi = {};
     Experience.forEach((exp) => {
-      expi[exp] = {
-        experience: exp,
-        checked: false,
-      };
+      expi[exp["skill"]] = exp;
+      expi[exp["skill"]]["checked"] = false;
     });
     Languages.forEach((language) => {
       languages[language] = {
@@ -65,18 +63,19 @@ export default class Application extends React.Component {
     };
 
     newValues.languages = [];
-    const languageIndex = 0;
 
     for (const language in values.languages) {
       if (values.languages[language].checked) {
-        newValues.languages[languageIndex] = values.languages[language];
         delete values.languages[language].checked;
 
-        const experiences = Object.keys(values.languages[language].experience);
+        const experiences = Object.values(
+          values.languages[language].experience
+        ).map((exp) => exp.skill);
         const temp = experiences.filter(
           (a) => values.languages[language].experience[a].checked
         );
-        newValues.languages[languageIndex].experience = temp;
+        values.languages[language].experience = temp;
+        newValues.languages.push(values.languages[language]);
       }
     }
 
