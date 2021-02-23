@@ -39,7 +39,6 @@ function LoginPage() {
     e.preventDefault();
     auth.signin(email, password).then(
       (user) => {
-        console.log(user);
         if (user && user.uid) {
           // redirect
           history.replace(from);
