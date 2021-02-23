@@ -7,6 +7,7 @@ import "uikit/dist/js/uikit.min";
 import { ProvideAuth } from "../../components/Auth/Auth";
 import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 import { auth } from "../../firebase";
+import UnauthorizedPage from "../UnauthorizedPage/UnauthorizedPage";
 import "./App.css";
 
 // import UIkit from 'uikit';
@@ -34,7 +35,8 @@ class App extends Component {
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       user.getIdTokenResult().then((idTokenResult) => {
-        if (idTokenResult.claims.admin) {
+        const role = idTokenResult.claims.role;
+        if (role === "admin" || role === "super_admin") {
           this.setState({ admin: true });
         }
       });
@@ -59,7 +61,7 @@ class App extends Component {
               <Route exact path="/application">
                 <Application />
               </Route>
-              <PrivateRoute exact path="/onboarding">
+              <PrivateRoute exact path="/onboarding" requiredRole={"admin"}>
                 <Onboarding />
               </PrivateRoute>
               <PrivateRoute exact path="/settings">
@@ -68,10 +70,10 @@ class App extends Component {
               <PrivateRoute exact path="/statistics">
                 <Statistics />
               </PrivateRoute>
-              <PrivateRoute exact path="/translator">
+              <PrivateRoute exact path="/translator" requiredRole={"admin"}>
                 <Translators />
               </PrivateRoute>
-              <PrivateRoute exact path="/case">
+              <PrivateRoute exact path="/case" requiredRole={"admin"}>
                 <Cases />
               </PrivateRoute>
               <PrivateRoute
@@ -86,6 +88,11 @@ class App extends Component {
                 exact
                 path="/login"
                 render={(props) => <Login {...props} />}
+              />
+              <Route
+                exact
+                path="/unathorized"
+                render={(props) => <UnauthorizedPage {...props} />}
               />
               <PrivateRoute exact path="/mycases">
                 <Home />
