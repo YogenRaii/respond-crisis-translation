@@ -1,10 +1,10 @@
 import React from "react";
 import "./ApplicationPage.css";
-import ContactForm from "../ContactForm/ContactForm";
 import Stage0 from "./Stage0";
+import Stage1 from "./Stage1";
 import Stage2 from "./Stage2/Stage2";
+import Stage3 from "./Stage3/Stage3";
 import Stage4 from "./Stage4";
-import Stage3 from "./Stage3";
 
 export default ({
   currentProgress,
@@ -19,14 +19,12 @@ export default ({
       return <Stage0 advance={advance} />;
     case 1:
       return (
-        <div className="uk-margin-medium-right">
-          <ContactForm
-            previous={previous}
-            advance={advance}
-            answers={answers}
-            onChange={onChange}
-          />
-        </div>
+        <Stage1
+          onChange={onChange}
+          previous={previous}
+          advance={advance}
+          answers={answers}
+        />
       );
     case 2:
       return (
