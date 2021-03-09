@@ -18,20 +18,35 @@ export default class Onboarding extends React.Component {
   }
 
   componentDidMount() {
-    console.log('onboarding');
+    this.loadApplications();
+  }
+  
+  loadApplications() {
     TranslatorService.getTranslators("PENDING").then((snapshot) => {
       const data = snapshot.docs.map((doc) => doc.data());
       this.setState({ translators: data });
     });
   }
 
+  updateApplication(translatorId, status) {
+    TranslatorService.updateStatus(translatorId, status).then(
+      () => {
+        // show pop up with success
+        // `Successfully ${status} the application.`
+        this.loadApplications();
+      },
+      (err) => {
+        // show pop up with failure
+        console.log(err);
+      }
+    );
+  }
+
   render() {
     const { translators } = this.state;
     return (
       <>
-        <Sidebar
-          active="onboarding"
-        />
+        <Sidebar active="onboarding" />
         <div className="tm-main uk-section uk-section-default">
           <div
             className="uk-container uk-position-relative uk-margin-remove"
@@ -232,10 +247,18 @@ export default class Onboarding extends React.Component {
                             <button
                               className="uk-button uk-button-danger"
                               style={{ marginRight: "5px" }}
+                              onClick={() =>
+                                this.updateApplication(onboard.id, "REJECTED")
+                              }
                             >
                               Reject
                             </button>
-                            <button className="uk-button uk-button-primary">
+                            <button
+                              className="uk-button uk-button-primary"
+                              onClick={() =>
+                                this.updateApplication(onboard.id, "APPROVED")
+                              }
+                            >
                               Approve
                             </button>
                           </div>
