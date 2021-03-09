@@ -1,7 +1,7 @@
 import React from "react";
 import "./Translators.css";
 import formatDate from "../../assets/helpers/formatDate";
-
+import { auth } from "../../firebase";
 import lang_short from "../../assets/lists/langShort";
 import cases from "../../assets/lists/Cases";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -13,28 +13,46 @@ export default class Translators extends React.Component {
     super(props);
     this.state = {
       show: null,
+      role: null,
       translators: [],
     };
   }
 
   componentDidMount() {
-    TranslatorService.getTranslators('APPROVED')
-      .then((snapshot) => {
-        const data = snapshot.docs.map((doc) => doc.data());
-        this.setState({ translators: data });
-      });
+    this.loadTranslators();
+
+    auth.currentUser.getIdTokenResult().then((idTokenResult) => {
+      const role = idTokenResult.claims.role;
+      this.setState({ role: role });
+    });
+  }
+
+  loadTranslators() {
+    TranslatorService.getTranslators("APPROVED").then((snapshot) => {
+      const data = snapshot.docs.map((doc) => doc.data());
+      this.setState({ translators: data });
+    });
+  }
+
+  updateTranslator(translatorId, role) {
+    TranslatorService.updateRole(translatorId, role).then(
+      () => {
+        // show pop up with success
+        // `Successfully applied ${role} role for the translator.`
+        this.loadTranslators();
+      },
+      (err) => {
+        // show pop up with failure
+        console.log(err);
+      }
+    );
   }
 
   render() {
     const { translators } = this.state;
     return (
       <>
-        <Sidebar
-          active="translators"
-          user_type={this.props.user_type ? "admin" : "all"}
-          first_name={this.props.first_name}
-          last_name={this.props.last_name}
-        />
+        <Sidebar active="translators" />
         <div className="tm-main uk-section uk-section-default">
           <div
             className="uk-container uk-position-relative uk-margin-remove"
@@ -258,6 +276,33 @@ export default class Translators extends React.Component {
                             </button>
                           </div>
                           <div className="uk-float-right">
+                            {onboard.role === "admin" &&
+                            this.state.role === "super_admin" ? (
+                              <button
+                                className="uk-button"
+                                style={{ marginRight: "5px" }}
+                                onClick={() =>
+                                  this.updateTranslator(
+                                    onboard.id,
+                                    "super_admin"
+                                  )
+                                }
+                              >
+                                Promote to Super Admin
+                              </button>
+                            ) : !onboard.role ? (
+                              <button
+                                className="uk-button"
+                                style={{ marginRight: "5px" }}
+                                onClick={() =>
+                                  this.updateTranslator(onboard.id, "admin")
+                                }
+                              >
+                                Promote to Admin
+                              </button>
+                            ) : (
+                              <span></span>
+                            )}
                             <button
                               className="uk-button uk-button-primary"
                               style={{ marginRight: "5px" }}
