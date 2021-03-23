@@ -81,9 +81,11 @@ class App extends Component {
                 path="/case/:case_id"
                 component={CasePage}
               ></PrivateRoute>
-              <Route exact path="/createaccount">
-                <CreateAccount />
-              </Route>
+              <Route
+                exact
+                path="/createaccount"
+                render={(props) => <CreateAccount {...props} />}
+              />
               <Route
                 exact
                 path="/login"
