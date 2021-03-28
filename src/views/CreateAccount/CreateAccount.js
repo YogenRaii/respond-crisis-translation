@@ -1,183 +1,156 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../assets/images/Respond_Logo_icon_fullcolor.png";
 import Footer from "../../components/Footer/Footer";
 import "./CreateAccount.css";
 import { auth } from "../../firebase";
-import { Redirect, Router } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { useAuth } from "../../components/Auth/Auth.js";
 
-import { createBrowserHistory } from "history";
+function CreateAccount() {
+  const [oobCode, setOobCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [codeError, setCodeError] = useState(null);
 
-export default class CreateAccount extends React.Component {
-  constructor(props) {
-    super(props);
-    // The passwords here will be viewable by "Inspect element", but this is
-    // not a privacy concern as it will only be the user's own password.
-    this.state = {
-      oobCode: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      loggedInUser: null,
-      error: "",
-      codeError: null,
-    };
+  const history = useHistory();
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: "/" } };
+  const mainAuth = useAuth();
 
-    this.updatePassword = this.updatePassword.bind(this);
-    this.updateConfirmPassword = this.updateConfirmPassword.bind(this);
-    this.getErrorMessage = this.getErrorMessage.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    const oobCode = this.getParameterByName("oobCode");
+  useEffect(() => {
+    const oobCode = getParameterByName("oobCode");
+    setOobCode(oobCode);
     auth
       .verifyPasswordResetCode(oobCode)
       .then((email) => {
-        this.setState({ email: email, oobCode: oobCode });
+        setEmail(email);
       })
       .catch((err) => {
-        this.setState({ codeError: err.message });
+        setCodeError(err.message);
       });
-  }
+  }, []);
 
-  getParameterByName(name, url = window.location.href) {
+  const getParameterByName = (name, url = window.location.href) => {
     name = name.replace(/[[]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
       results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return "";
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
+  };
 
-  updatePassword(e) {
-    this.setState({ password: e.target.value });
-  }
-
-  updateConfirmPassword(e) {
-    this.setState({ confirmPassword: e.target.value });
-  }
-
-  getErrorMessage() {
-    return this.state.error ? (
+  const getErrorMessage = () => {
+    return error ? (
       <div>
-        <p className="ErrorMessage"> {this.state.error} </p>
+        <p className="ErrorMessage"> {error} </p>
       </div>
     ) : (
       <div></div>
     );
-  }
+  };
 
-  handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (this.state.password !== this.state.confirmPassword) {
-      this.setState({ error: "Passwords do not match. Please fix." });
-    } else if (this.state.password === "") {
-      this.setState({ error: "Password cannot be empty." });
+    if (password !== confirmPassword) {
+      setError("Passwords do not match. Please fix.");
+    } else if (password === "") {
+      setError("Password cannot be empty.");
     } else {
       auth
-        .confirmPasswordReset(this.state.oobCode, this.state.password)
+        .confirmPasswordReset(oobCode, password)
         .then(() => {
-          auth
-            .signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(
-              (userRecord) => {
-                console.log(userRecord);
-                // if admin, lands to cases
-                // if translator, lands to my cases
-                this.setState({ loggedInUser: userRecord, errorMessage: "" });
-              },
-              (err) => {
-                console.log(err);
-                this.setState({ loggedInUser: null });
+          mainAuth.signin(email, password).then(
+            (user) => {
+              if (user && user.uid) {
+                // redirect
+                history.replace(from);
+              } else {
+                setError(
+                  "Error while creating account! Please contact support."
+                );
               }
-            );
+            },
+            (err) => {
+              setError(err);
+            }
+          );
         })
         .catch((err) => {
-          this.setState({ error: err });
+          setError(err);
           console.log(err);
         });
     }
-  }
+  };
 
-  render() {
-    const { loggedInUser } = this.state;
-    const { codeError } = this.state;
-    let errorMessage = this.getErrorMessage();
+  return (
+    <div className="CreateAccount">
+      <div className="UserInformation">
+        <img
+          className="Logo"
+          src={Logo}
+          width={50}
+          height={50}
+          alt="Respond Crisis Translation Logo"
+        />
+        <br />
+        <br />
 
-    if (loggedInUser) {
-      const newHistory = createBrowserHistory();
-      return (
-        <Router history={newHistory}>
-          <Redirect to="/" />
-        </Router>
-      );
-    }
-    return (
-      <div className="CreateAccount">
-        <div className="UserInformation">
-          <img
-            className="Logo"
-            src={Logo}
-            width={50}
-            height={50}
-            alt="Respond Crisis Translation Logo"
-          />
-          <br />
-          <br />
-
-          <h4>Create login information</h4>
-          {codeError ? (
-            <section>
-              <div>
-                <p>{codeError}</p>
-                <p>Please try resetting password!</p>
-              </div>
-            </section>
-          ) : (
-            <section>
-              <form onSubmit={this.handleSubmit}>
-                <label>
-                  Email (account name):
-                  <br />
-                  <input
-                    readOnly={true}
-                    type="email"
-                    value={this.state.email}
-                    name="email_account"
-                  />
-                </label>
+        <h4>Create login information</h4>
+        {codeError ? (
+          <section>
+            <div>
+              <p>{codeError}</p>
+              <p>Please try resetting password!</p>
+            </div>
+          </section>
+        ) : (
+          <section>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Email (account name):
                 <br />
-                <label>
-                  Create a password:
-                  <br />
-                  <input
-                    type="password"
-                    name="password"
-                    onChange={this.updatePassword}
-                    placeholder="enter password here"
-                  />
-                </label>
+                <input
+                  readOnly={true}
+                  type="email"
+                  value={email}
+                  name="email_account"
+                />
+              </label>
+              <br />
+              <label>
+                Create a password:
                 <br />
-                <label>
-                  Please re-enter your password:
-                  <br />
-                  <input
-                    type="password"
-                    name="confirm-password"
-                    onChange={this.updateConfirmPassword}
-                    placeholder="re-enter password here"
-                  />
-                </label>
+                <input
+                  type="password"
+                  name="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="enter password here"
+                />
+              </label>
+              <br />
+              <label>
+                Please re-enter your password:
                 <br />
-                {errorMessage}
-                <br />
-                <input type="submit" value="Complete" />
-              </form>
-            </section>
-          )}
-        </div>
-        <Footer />
+                <input
+                  type="password"
+                  name="confirm-password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="re-enter password here"
+                />
+              </label>
+              <br />
+              {getErrorMessage()}
+              <br />
+              <input type="submit" value="Complete" />
+            </form>
+          </section>
+        )}
       </div>
-    );
-  }
+      <Footer />
+    </div>
+  );
 }
+
+export default CreateAccount;
