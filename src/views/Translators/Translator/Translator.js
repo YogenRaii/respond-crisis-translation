@@ -71,7 +71,6 @@ export default ({ onChange, updateTranslator, role, onboard, i, show }) => {
       >
         <td colSpan={8}>
           <ExtendedTranslator
-            onChange={onChange}
             updateTranslator={updateTranslator}
             role={role}
             onboard={onboard}

@@ -82,11 +82,11 @@ export default class Translators extends React.Component {
                 {translators?.map((onboard, i) => (
                   <Translator
                     onChange={() =>
-                      this.setState({ show: this.show === i ? null : i })
+                      this.setState({ show: this.state.show === i ? null : i })
                     }
                     updateTranslator={this.updateTranslator}
                     role={this.state.role}
-                    show={this.show === i}
+                    show={this.state.show === i}
                     onboard={onboard}
                     i={i}
                   />

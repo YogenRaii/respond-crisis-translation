@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ onChange, updateTranslator, role, onboard, i }) => {
+export default ({ updateTranslator, role, onboard, i }) => {
   return (
     <>
       <div uk-grid="">
