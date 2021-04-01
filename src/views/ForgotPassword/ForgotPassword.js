@@ -2,27 +2,10 @@ import React, { useState } from "react";
 import Logo from "../../assets/images/Respond_Logo_icon_fullcolor.png";
 import Footer from "../../components/Footer/Footer";
 import './ForgotPassword.css';
-import { auth } from "../../firebase";
-import { useHistory, useLocation } from "react-router-dom";
-import { useAuth } from "../../components/Auth/Auth.js";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-
-  const history = useHistory();
-  const location = useLocation();
-  const { from } = location.state || { from: { pathname: "/" } };
-  const mainAuth = useAuth();
-
-  const getParameterByName = (name, url = window.location.href) => {
-    name = name.replace(/[[]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return "";
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  };
 
   const getErrorMessage = () => {
     return error ? (
@@ -34,13 +17,12 @@ function ForgotPassword() {
     );
   };
 
-  const updateEmail = (e) => {
-    this.setState({email: e.target.value})
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // Call BE API to send password reset email, handle history correctly.
+    // 2 lines below are placeholders so that unused variable check does not throw error.
+    console.log(email);
+    setError("Hello this is placeholder.")
   };
 
   return (
@@ -52,7 +34,7 @@ function ForgotPassword() {
 
         <h4>Retrieve password</h4>
         <h5>Type in your registered email address and click Send.</h5>
-        <form>
+        <form onSubmit={handleSubmit}>
         <label>
         Email:
         <br/>
